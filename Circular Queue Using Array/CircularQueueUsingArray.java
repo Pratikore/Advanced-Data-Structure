@@ -1,56 +1,65 @@
-package utils;
+package Question2Circular;
 
-import exceptions.QueueException;
-import implementation.QueueIntf;
+import java.util.Arrays;
 
-public class CircularQueueUsingArray implements QueueIntf 
-{
-	int front, rear;
-	int size;
-	int[] queue;
-	
-	public CircularQueueUsingArray(int size) 
-	{
-		this.size = size;
+public class CircularQueueUsingArray implements CircularQueueIntf {
+
+	int front;
+	int rear;
+	int queue[];
+
+	public CircularQueueUsingArray(int size) {
+		super();
+		this.front = 0;
+		this.rear = 0;
 		queue = new int[size];
-		front = rear = 0;
 	}
 
 	@Override
-	public void addQ(int element) 
-	{
-		if(isFull())
-			throw new QueueException("Queue already full, can't add new elements.");
-		
-		queue[rear] = element;
-		
-		rear = (rear+1)%size;
+	public void addQ(int element) throws CiQueueException {
+		 if (!isFull() ){
+			 rear = (rear+1) % queue.length;
+			
+		} else
+			throw new CiQueueException("Queue is full");
 	}
 
 	@Override
-	public int deleteQ()
-	{
-		if(isEmpty())
-			throw new QueueException("Queue is empty, no element to delete.");
-		
-		int num = queue[front];
-		front = (front+1)%size;
-		return num;
+	public int deleteQ() throws CiQueueException {
+		if (!isEmpty()) {
+			int element = queue[front];
+			front = (front+1)% queue.length;
+			//int temp = 0;
+			//++front;
+//			while (temp < queue.length - 1) {
+//				queue[temp] = queue[(temp + 1)];
+//				if (temp == queue.length - 2)
+//					queue[temp + 1] = 0;
+//				temp++;
+//			}
+			return element;
+		} else {
+			throw new CiQueueException("Queue is Empty");
+		}
 	}
 
 	@Override
-	public boolean isEmpty() 
-	{
-		if(front == rear)
+	public boolean isEmpty() {
+		if (front == rear)
 			return true;
 		return false;
 	}
 
 	@Override
-	public boolean isFull() 
-	{
-		if((rear+1)%size == front)
+	public boolean isFull() {
+		if ((rear +1)% queue.length== front)
 			return true;
 		return false;
 	}
+
+	@Override
+	public String toString() {
+		return Arrays.toString(queue);
+	}
+
 }
